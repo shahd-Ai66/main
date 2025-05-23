@@ -2,15 +2,13 @@ import java.util.Scanner;
 
 public class MainApp {
 
+    
     public static boolean isValidEmail(String email) {
-        return email.contains("@") &&
-               email.contains(".") &&
-               !email.startsWith("@") &&
-               !email.endsWith("@") &&
-               !email.startsWith(".") &&
-               !email.endsWith(".") &&
-               email.indexOf("@") < email.lastIndexOf(".");
-    }
+    return email.contains("@") &&
+           email.contains(".") &&
+           email.indexOf("@") < email.lastIndexOf(".");
+}
+
 
     public static Polynomial readPolynomial(Scanner sc) {
         Polynomial p = new Polynomial();
@@ -51,7 +49,7 @@ public class MainApp {
             System.out.print("Enter your email: ");
             email = sc.nextLine();
         } while (!isValidEmail(email));
-        System.out.println("✅ Email verified.");
+        System.out.println("Email verified.");
 
         Polynomial p1 = readPolynomial(sc);
         Polynomial p2 = readPolynomial(sc);
@@ -74,12 +72,12 @@ public class MainApp {
                     break;
                 case "/":
                     Polynomial[] divisionResult = p1.divide(p2);
-                    System.out.println("📌 Quotient: " + divisionResult[0]);
-                    System.out.println("📌 Remainder: " + divisionResult[1]);
+                    System.out.println(" Quotient: " + divisionResult[0]);
+                    System.out.println(" Remainder: " + divisionResult[1]);
                     result = divisionResult[0];
                     break;
                 default:
-                    System.out.println("🚫 The operation is not supported.");
+                    System.out.println(" The operation is not supported.");
                     return;
             }
         } catch (ArithmeticException e) {
@@ -95,17 +93,18 @@ public class MainApp {
 
         switch (viewChoice) {
             case 2:
-                System.out.println("📌 Postfix: " + result.toPostfixString());
+                System.out.println(" Postfix: " + result.toPostfixString());
                 break;
             case 3:
-                System.out.println("📌 Prefix: " + result.toPrefixString());
+                System.out.println(" Prefix: " + result.toPrefixString());
                 break;
             default:
-                System.out.println("📌 Infix: " + result);
+                System.out.println(" Infix: " + result);
         }
 
         System.out.print("Enter a value for X to evaluate: ");
         int xVal = sc.nextInt();
-        System.out.println("🔢 Result at X = " + xVal + " is: " + result.evaluate(xVal));
+        System.out.println(" Result at X = " + xVal + " is: " + result.evaluate(xVal));
     }
 }
+
