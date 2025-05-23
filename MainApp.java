@@ -1,16 +1,21 @@
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class MainApp {
 
     public static boolean isValidEmail(String email) {
-        return Pattern.matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+", email);
+        return email.contains("@") &&
+               email.contains(".") &&
+               !email.startsWith("@") &&
+               !email.endsWith("@") &&
+               !email.startsWith(".") &&
+               !email.endsWith(".") &&
+               email.indexOf("@") < email.lastIndexOf(".");
     }
 
     public static Polynomial readPolynomial(Scanner sc) {
         Polynomial p = new Polynomial();
         System.out.println("Enter the polynomial (example: 3X^2 + 2X + 1): ");
-        String input = sc.nextLine().replaceAll("-", "+-").replaceAll("x", "X");//استخدمت replaceall حتى تعدل على المتغيرات في حال ادخلها المستخدم  small
+        String input = sc.nextLine().replace("-", "+-").replace("x", "X");
 
         String[] parts = input.split("\\+");
 
@@ -21,9 +26,12 @@ public class MainApp {
             int coef = 0, expo = 0;
 
             if (part.contains("X")) {
-                String[] split = part.split("X\\^?");
-                coef = split[0].isEmpty() ? 1 : split[0].equals("-") ? -1 : Integer.parseInt(split[0]);
-                expo = split.length > 1 ? Integer.parseInt(split[1]) : 1;
+                int xIndex = part.indexOf("X");
+                String coefStr = part.substring(0, xIndex);
+                String expoStr = part.contains("^") ? part.substring(xIndex + 2) : "1";
+
+                coef = coefStr.isEmpty() ? 1 : coefStr.equals("-") ? -1 : Integer.parseInt(coefStr);
+                expo = Integer.parseInt(expoStr);
             } else {
                 coef = Integer.parseInt(part);
                 expo = 0;
@@ -43,7 +51,7 @@ public class MainApp {
             System.out.print("Enter your email: ");
             email = sc.nextLine();
         } while (!isValidEmail(email));
-        System.out.println(" Email verified.");
+        System.out.println("✅ Email verified.");
 
         Polynomial p1 = readPolynomial(sc);
         Polynomial p2 = readPolynomial(sc);
@@ -66,12 +74,12 @@ public class MainApp {
                     break;
                 case "/":
                     Polynomial[] divisionResult = p1.divide(p2);
-                    System.out.println(" Quotient: " + divisionResult[0]);
-                    System.out.println(" Remainder: " + divisionResult[1]);
-                    result = divisionResult[0]; 
+                    System.out.println("📌 Quotient: " + divisionResult[0]);
+                    System.out.println("📌 Remainder: " + divisionResult[1]);
+                    result = divisionResult[0];
                     break;
                 default:
-                    System.out.println(" The operation is not supported.");
+                    System.out.println("🚫 The operation is not supported.");
                     return;
             }
         } catch (ArithmeticException e) {
@@ -87,18 +95,17 @@ public class MainApp {
 
         switch (viewChoice) {
             case 2:
-                System.out.println(" Postfix: " + result.toPostfixString());
+                System.out.println("📌 Postfix: " + result.toPostfixString());
                 break;
             case 3:
-                System.out.println(" Prefix: " + result.toPrefixString());
+                System.out.println("📌 Prefix: " + result.toPrefixString());
                 break;
             default:
-                System.out.println(" Infix: " + result);
+                System.out.println("📌 Infix: " + result);
         }
 
         System.out.print("Enter a value for X to evaluate: ");
         int xVal = sc.nextInt();
-        System.out.println(" Result at X = " + xVal + " is: " + result.evaluate(xVal));
+        System.out.println("🔢 Result at X = " + xVal + " is: " + result.evaluate(xVal));
     }
 }
-
