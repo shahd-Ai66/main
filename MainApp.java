@@ -1,13 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
-package com.mycompany.mainapp;
-
-/**
- *
- * @author AC
- */
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -20,7 +10,7 @@ public class MainApp {
     public static Polynomial readPolynomial(Scanner sc) {
         Polynomial p = new Polynomial();
         System.out.println("Enter the polynomial (example: 3X^2 + 2X + 1): ");
-        String input = sc.nextLine().replaceAll("-", "+-").replaceAll("x", "X");// If the user enters an x instead of  X the code it will be modified.
+        String input = sc.nextLine().replaceAll("-", "+-").replaceAll("x", "X");//استخدمت replaceall حتى تعدل على المتغيرات في حال ادخلها المستخدم  small
 
         String[] parts = input.split("\\+");
 
@@ -50,31 +40,43 @@ public class MainApp {
 
         String email;
         do {
-            System.out.print("Enter your email : ");
+            System.out.print("Enter your email: ");
             email = sc.nextLine();
         } while (!isValidEmail(email));
-        System.out.println("Email verified.");
+        System.out.println(" Email verified.");
 
         Polynomial p1 = readPolynomial(sc);
         Polynomial p2 = readPolynomial(sc);
 
-        System.out.println("Select the process: (+ - *): ");
+        System.out.println("Select the operation: (+ - * /): ");
         String op = sc.nextLine();
 
         Polynomial result = null;
-        switch (op) {
-            case "+":
-                result = p1.add(p2);
-                break;
-            case "-":
-                result = p1.subtract(p2);
-                break;
-            case "*":
-                result = p1.multiply(p2);
-                break;
-            default:
-                System.out.println("The operation is not supported..");
-                return;
+
+        try {
+            switch (op) {
+                case "+":
+                    result = p1.add(p2);
+                    break;
+                case "-":
+                    result = p1.subtract(p2);
+                    break;
+                case "*":
+                    result = p1.multiply(p2);
+                    break;
+                case "/":
+                    Polynomial[] divisionResult = p1.divide(p2);
+                    System.out.println(" Quotient: " + divisionResult[0]);
+                    System.out.println(" Remainder: " + divisionResult[1]);
+                    result = divisionResult[0]; 
+                    break;
+                default:
+                    System.out.println(" The operation is not supported.");
+                    return;
+            }
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            return;
         }
 
         System.out.println("Choose how to display the result:");
@@ -88,14 +90,15 @@ public class MainApp {
                 System.out.println(" Postfix: " + result.toPostfixString());
                 break;
             case 3:
-                System.out.println("Prefix: " + result.toPrefixString());
+                System.out.println(" Prefix: " + result.toPrefixString());
                 break;
             default:
                 System.out.println(" Infix: " + result);
         }
 
-        System.out.print("to compensate enter a value X : ");
+        System.out.print("Enter a value for X to evaluate: ");
         int xVal = sc.nextInt();
-        System.out.println(" الناتج عند X = " + xVal + " is : " + result.evaluate(xVal));
+        System.out.println(" Result at X = " + xVal + " is: " + result.evaluate(xVal));
     }
 }
+
